@@ -41,7 +41,25 @@ def skimarmot_scraper(resort_dict):
     else:
         print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
+def sunshine_scraper(resort_dict):
+    url = "https://www.skibanff.com/conditions"
 
+    # Send an HTTP request to the URL
+    response = requests.get(url)
 
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find the element containing the weather information
+        weather_group_elements = soup.find('div', class_='currentConditionsContainer')
+
+        snow_info = weather_group_elements.text.strip()
+        print(snow_info)
 
 print(skimarmot_scraper(resort_dict))
+
+sunshine_scraper(resort_dict)
+
+
