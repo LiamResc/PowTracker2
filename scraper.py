@@ -41,3 +41,4 @@ def skimarmot_scraper():
 
     else:
         print(f"Failed to retrieve the page. Status Code: {response.status_code}")
+skimarmot_scraper()
