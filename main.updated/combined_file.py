@@ -158,6 +158,16 @@ snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
 plugins.MousePosition().add_to(snowfall_map)
 
 
+    #Add markers for every location
+for key in data.keys():
+    latitude = data[key][0]
+    longitude = data[key][1]
+    resort = key
+    folium.Marker([latitude,longitude],
+        tooltip = resort,
+        icon=folium.Icon(icon='map-marker',icon_color='green')
+        ).add_to(snowfall_map)
+
 radius_input = input('which snowfall to display: ')
 # Iterate through the data and add CircleMarker for each resort
 for key in data.keys():

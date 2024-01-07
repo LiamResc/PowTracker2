@@ -319,7 +319,6 @@ def main(inputs):
     snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
     plugins.MousePosition().add_to(snowfall_map)
 
-
     
     # Iterate through the data and add CircleMarker for each resort
     for key in data.keys():
