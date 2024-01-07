@@ -34,7 +34,7 @@ def skimarmot_scraper(resort_dict):
         #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
         values = [52.8005917, -118.0833546] + selected_values + [temperature_numbers[1]]
 
-        resort_dict['Marmot'] = values
+        resort_dict['Marmot, AB'] = values
 
         return resort_dict
 
@@ -85,7 +85,7 @@ def revelstoke_scrape(resort_dict):
         selected_values = [snow_numbers[i] for i in [2, 4, 5, 6]]
 
         values = [51.0036,-118.2143] + selected_values + [weather_revelstoke()]
-        resort_dict['revelstoke'] = values
+        resort_dict['Revelstoke, BC'] = values
         return resort_dict
 
     else:
@@ -119,7 +119,7 @@ def sunpeaks_scrape(resort_dict):
         return resort_dict
 
     else:
-        resort_dict['Sunpeaks'] = [51.0036,-118.2143] + [0,0,0,0,0]
+        resort_dict['Sunpeaks, BC'] = [51.0036,-118.2143] + [0,0,0,0,0]
         return resort_dict
 
 def bigwhite_scraper(resort_dict):
@@ -155,7 +155,7 @@ def bigwhite_scraper(resort_dict):
             #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
             values = [49.731427663412234, -118.94392187439394] + snow_numbers + [temp_num]
 
-            resort_dict['Big White'] = values
+            resort_dict['Big White, BC'] = values
             return resort_dict
         else:
             print("Failed to extract snow or temperature information.")
@@ -195,7 +195,7 @@ def grouse_scrape(resort_dict):
         return resort_dict
 
     else:
-        resort_dict['Sunpeaks'] = [49.3854,-123.0811] + [0,0,0,0,0]
+        resort_dict['Sunpeaks, BC'] = [49.3854,-123.0811] + [0,0,0,0,0]
         return resort_dict
 
 grouse_scrape(resort_dict)
