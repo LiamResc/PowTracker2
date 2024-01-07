@@ -1,4 +1,5 @@
 import folium
+import math
 from folium import plugins
 from branca.colormap import LinearColormap
 from scraper import *
@@ -6,7 +7,7 @@ from scraper import *
 data = resort_dict
 
 
-temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin = -20, vmax=20)
+
 
 province_input = input('province:')
 
@@ -45,21 +46,25 @@ for key in data.keys():
     radius_input = input('which snowfall to display: ')
     radius_size = 0 #impacts size of circles
     if radius_input == '7 day snow fall':
-        radius_size = snowfall7d = data[key][3]
+        radius_size = snowfall7d 
     elif radius_input == '24 hour snowfall':
-        radius_size = snowfall24h = data[key][2]
+        radius_size = snowfall24h
     elif radius_input == 'Snow base':
-        radius_size = snow_base = data[key][4]
+        radius_size = snow_base
     else:
-        radius_size = seasonal_snowfall = data[key][5]
+        radius_size = seasonal_snowfall
+
+    radius_size = math.log2(int(radius_size) + 1) * 5
 
 
     # Use the colormap to get color based on temperature
-    
+    temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin = -20, vmax=20)
     temperature_color = temperature_colormap(int(current_temp))
 
     # Create a pop-up with information
-    popup_text = f"{resort_upper}\n Current Temperature: {current_temp}°C\n Base Snow: {snow_base}cm\n Snowfall 7 Days: {snowfall7d}cm \n Seasonal Snowfall: {seasonal_snowfall}cm\n Snowfall 24 Hours: {snowfall24h}cm"
+    #popup_text = f"{resort_upper}\n Current Temperature: {current_temp}°C\n Base Snow: {snow_base}cm\n Snowfall 7 Days: {snowfall7d}cm \n Seasonal Snowfall: {seasonal_snowfall}cm\n Snowfall 24 Hours: {snowfall24h}cm"
+    
+
 
 
     # Add CircleMarker to the map with a pop-up
@@ -70,7 +75,7 @@ for key in data.keys():
         fill=True,
         fill_color=temperature_color,  # Set the fill color based on temperature
         fill_opacity=0.8,
-        popup=folium.Popup(popup_text, parse_html=True)
+        popup=folium.Popup(popup_text, max_width=250, parse_html=True)
     ).add_to(snowfall_map)
 
 # Use colormap for temperature (LinearColormap)
