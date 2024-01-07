@@ -245,6 +245,41 @@ def pano_scraper(resort_dict):
     else:
         print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
+def lemassif(resort_dict):
+
+    url = "https://www.lemassif.com/en/the-mountain/winter/snow-weather-webcams"
+
+    # Send an HTTP request to the URL
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find the element containing the weather information
+        weather_group_elements = soup.find_all('span', class_='metric-value')
+        twentfour_hour = weather_group_elements[8].get_text(strip=True)
+
+        snow_numbers = [twentfour_hour]
+
+        for i in range(10,12):
+            snow_numbers.append(weather_group_elements[i].get_text(strip=True))
+        snow_numbers.append(weather_group_elements[11].get_text(strip=True))
+        snow_numbers.append(weather_group_elements[0].get_text(strip=True))
+
+
+        # Check if both snow and temperature information were obtained
+        values = [47.4167, -70.5470] + snow_numbers
+
+        resort_dict['Le Massif, QC'] = values
+        return resort_dict
+        
+    else:
+        print(f"Failed to retrieve the page. Status Code: {response.status_code}")
+
+
+lemassif(resort_dict)
 pano_scraper(resort_dict)
 grouse_scrape(resort_dict)
 bigwhite_scraper(resort_dict)
