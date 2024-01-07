@@ -92,5 +92,6 @@ def revelstoke_scrape(resort_dict):
         resort_dict['revelstoke'] = [51.0036,118.2143] + [0,0,0,0,0]
         return resort_dict
 
-
-print(skimarmot_scraper(resort_dict))
+skimarmot_scraper(resort_dict)
+revelstoke_scrape(resort_dict)
+print(resort_dict)
