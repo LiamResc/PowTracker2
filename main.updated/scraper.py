@@ -163,6 +163,42 @@ def bigwhite_scraper(resort_dict):
     else:
         print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
+def grouse_scrape(resort_dict):
+    # Replace this URL with the actual URL of the website you want to scrape
+    url = "https://www.grousemountain.com/current_conditions"
+
+    # Send an HTTP request to the URL
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Replace these tags and attributes with the actual ones that contain the temperature information
+        # Replace these tags and attributes with the actual ones that contain the temperature information
+        all = soup.find_all("h3", class_="metric")
+        twenfour_hour = soup.find_all("h3", class_="metric")[3].text.strip()
+        snow_base = soup.find_all("h3", class_="metric")[8].text.strip()
+        temp = soup.find_all("h3", class_="metric")[0].text.strip()
+        snow_numbers = [twenfour_hour,snow_base,temp]
+        for i in range(5,7):
+            if i == 5:
+                snow_numbers.insert(1,all[i].text.strip())
+            else:
+                snow_numbers.insert(3,all[i].text.strip())
+        # Extract and print the text content of the element
+        numbers = [int(re.search(r'-?\d+', element).group()) for element in snow_numbers if re.search(r'-?\d+', element)]
+        # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
+        values = [49.3854,-123.0811] + numbers
+        resort_dict['Grouse Mountain'] = values
+        return resort_dict
+
+    else:
+        resort_dict['Sunpeaks'] = [49.3854,-123.0811] + [0,0,0,0,0]
+        return resort_dict
+
+grouse_scrape(resort_dict)
 bigwhite_scraper(resort_dict)
 skimarmot_scraper(resort_dict)
 revelstoke_scrape(resort_dict)
