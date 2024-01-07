@@ -1,5 +1,6 @@
 import folium
 from folium import plugins
+from folium import IFrame
 import pandas as pd
 import math
 from branca.colormap import LinearColormap
@@ -273,12 +274,23 @@ def main(inputs):
         temperature_color = temperature_colormap(int(current_temp))
 
         # Create a pop-up with information
-        popup_text = f"{resort_upper}\n Current Temperature: {current_temp}°C\n Base Snow: {snow_base}cm\n Snowfall 7 Days: {snowfall7d}cm \n Seasonal Snowfall: {seasonal_snowfall}cm\n Snowfall 24 Hours: {snowfall24h}cm"
-        
+           # Create HTML content for pop-up
+        popup_text = f"""
+        <div style="text-align: center; font-weight: bold;">{resort_upper}</div>
+        <div style="text-align: center;">Temperature: {current_temp}°C</div>
+        <div style="text-align: center;"> </div>
+        <div style="text-align: center;">Base Snow: {snow_base}cm</div>
+        <div style="text-align: center;">Snowfall 7 Days: {snowfall7d}cm</div>
+        <div style="text-align: center;">Seasonal Snowfall: {seasonal_snowfall}cm</div>
+        <div style="text-align: center;">Snowfall 24 Hours: {snowfall24h}cm
+        """
+
+        # Create an IFrame to embed the HTML content
+        popup_iframe = IFrame(html=popup_text, width=200, height=146)
+        popup = folium.Popup(popup_iframe)
 
 
 
-        # Add CircleMarker to the map with a pop-up
         folium.CircleMarker(
             location=[latitude, longitude],
             radius=radius_size,
@@ -286,7 +298,7 @@ def main(inputs):
             fill=True,
             fill_color=temperature_color,  # Set the fill color based on temperature
             fill_opacity=0.8,
-            popup=folium.Popup(popup_text, max_width=250, parse_html=True)
+            popup=popup
         ).add_to(snowfall_map)
 
     # Use colormap for temperature (LinearColormap)
