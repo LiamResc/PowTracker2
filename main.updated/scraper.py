@@ -56,8 +56,8 @@ def weather_revelstoke():
 
         # Extract and print the current temperature
         temperature = temperature_element.text.strip() if temperature_element else "N/A"
-        temperature_numeric = re.sub(r'\D', '', temperature)  # Remove non-numeric characters
-        return temperature_numeric
+        temperature_numeric = re.search(r'-?\d+(\.\d+)?', temperature)
+        return int(temperature_numeric.group())
     else:
         temp = 0
         return temp
