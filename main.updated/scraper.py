@@ -259,18 +259,19 @@ def lemassif(resort_dict):
 
         # Find the element containing the weather information
         weather_group_elements = soup.find_all('span', class_='metric-value')
-        twentfour_hour = weather_group_elements[8].get_text(strip=True)
+        twentfour_hour = weather_group_elements[8].get_text(strip=True).strip("cm")
 
         snow_numbers = [twentfour_hour]
 
         for i in range(10,12):
-            snow_numbers.append(weather_group_elements[i].get_text(strip=True))
-        snow_numbers.append(weather_group_elements[11].get_text(strip=True))
-        snow_numbers.append(weather_group_elements[0].get_text(strip=True))
+            snow_numbers.append(weather_group_elements[i].get_text(strip=True).strip("cm"))
+        snow_numbers.append(weather_group_elements[11].get_text(strip=True).strip("cm"))
+        snow_numbers.append(weather_group_elements[0].get_text(strip=True).strip("°C"))
 
 
         # Check if both snow and temperature information were obtained
         values = [47.4167, -70.5470] + snow_numbers
+        #values2 = [int(re.search(r'-?\d+(\.\d+)?', element).group()) for element in values if re.search(r'-?\d+(\.\d+)?', element)]
 
         resort_dict['Le Massif, QC'] = values
         return resort_dict
