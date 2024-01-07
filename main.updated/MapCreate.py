@@ -55,9 +55,11 @@ for key in data.keys():
         radius_size = snow_base
     else:
         radius_size = seasonal_snowfall
-
-    radius_size = math.log2(int(radius_size) + 1) * 5
-    print(radius_size)
+    if radius_size == 'N/A':
+        radius_size=5   
+    else:
+        radius_size = 5 + math.log2(int(radius_size) + 1) * 5
+   
 
 
     # Use the colormap to get color based on temperature

@@ -84,7 +84,7 @@ def revelstoke_scrape(resort_dict):
         # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
         selected_values = [snow_numbers[i] for i in [2, 4, 5, 6]]
 
-        values = [51.0036,118.2143] + selected_values + [weather_revelstoke()]
+        values = [51.0036,-118.2143] + selected_values + [weather_revelstoke()]
         resort_dict['revelstoke'] = values
         return resort_dict
 
@@ -114,7 +114,7 @@ def sunpeaks_scrape(resort_dict):
         snow_numbers = [twenfour_hour,seven_hour,snow_base,"N/A",temp]
 
         # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
-        values = [50.8820,119.9056] + snow_numbers
+        values = [50.8820,-119.9056] + snow_numbers
         resort_dict['Sunpeaks'] = values
         return resort_dict
 
