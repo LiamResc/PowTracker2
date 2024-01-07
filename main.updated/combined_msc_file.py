@@ -361,7 +361,7 @@ def main(inputs):
 
 
     if province_input == 'All Canada':
-        starting_location = [56.1304, -100.3468]
+        starting_location = [54.1304, -100.3468]
         zoom = 4
     elif province_input == 'Alberta':
         starting_location = [54.5279, -118.2916]
