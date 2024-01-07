@@ -44,7 +44,7 @@ def main(inputs):
             #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
             values = [52.8005917, -118.0833546] + selected_values + [temperature_numbers[1]]
 
-            resort_dict['marmot'] = values
+            resort_dict['Marmot, AB'] = values
 
             return resort_dict
 
@@ -95,11 +95,11 @@ def main(inputs):
             selected_values = [snow_numbers[i] for i in [2, 4, 5, 6]]
 
             values = [51.0036,-118.2143] + selected_values + [weather_revelstoke()]
-            resort_dict['revelstoke'] = values
+            resort_dict['Revelstoke, BC'] = values
             return resort_dict
 
         else:
-            resort_dict['revelstoke'] = [51.0036,-118.2143] + [0,0,0,0,0]
+            resort_dict['Revelstoke, BC'] = [51.0036,-118.2143] + [0,0,0,0,0]
             return resort_dict
 
     def sunpeaks_scrape(resort_dict):
@@ -125,11 +125,11 @@ def main(inputs):
 
             # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
             values = [50.8820,-119.9056] + snow_numbers
-            resort_dict['Sunpeaks'] = values
+            resort_dict['Sunpeaks, BC'] = values
             return resort_dict
 
         else:
-            resort_dict['Sunpeaks'] = [51.0036,-118.2143] + [0,0,0,0,0]
+            resort_dict['Sunpeaks, BC'] = [51.0036,-118.2143] + [0,0,0,0,0]
             return resort_dict
 
     def pano_scraper(resort_dict):
@@ -179,7 +179,6 @@ def main(inputs):
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
-
     def grouse_scrape(resort_dict):
         # Replace this URL with the actual URL of the website you want to scrape
         url = "https://www.grousemountain.com/current_conditions"
@@ -208,11 +207,11 @@ def main(inputs):
             numbers = [int(re.search(r'-?\d+', element).group()) for element in snow_numbers if re.search(r'-?\d+', element)]
             # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
             values = [49.3854,-123.0811] + numbers
-            resort_dict['Grouse Mountain'] = values
+            resort_dict['Grouse Mt., B'] = values
             return resort_dict
 
         else:
-            resort_dict['Sunpeaks'] = [49.3854,-123.0811] + [0,0,0,0,0]
+            resort_dict['Grouse Mt., BC'] = [49.3854,-123.0811] + [0,0,0,0,0]
             return resort_dict
         
     def bigwhite_scraper(resort_dict):
@@ -247,15 +246,13 @@ def main(inputs):
             if snow_numbers and temp_num:
                 #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
                 values = [49.731427663412234, -118.94392187439394] + snow_numbers + [temp_num]
-
-                resort_dict['Big White'] = values
+                resort_dict['Big White, BC'] = values
                 return resort_dict
             else:
                 print("Failed to extract snow or temperature information.")
 
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
-
 
     def lemassif(resort_dict):
 
@@ -304,7 +301,7 @@ def main(inputs):
 
 
     if province_input == 'All Canada':
-        starting_location = [56.1304, -106.3468]
+        starting_location = [56.1304, -100.3468]
         zoom = 4
     elif province_input == 'Alberta':
         starting_location = [54.5279, -118.2916]
@@ -319,7 +316,6 @@ def main(inputs):
 
     snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
     plugins.MousePosition().add_to(snowfall_map)
-
 
     
     # Iterate through the data and add CircleMarker for each resort
