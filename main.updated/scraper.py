@@ -92,6 +92,38 @@ def revelstoke_scrape(resort_dict):
         resort_dict['revelstoke'] = [51.0036,-118.2143] + [0,0,0,0,0]
         return resort_dict
 
+def sunpeaks_scrape(resort_dict):
+    # Replace this URL with the actual URL of the website you want to scrape
+    url = "https://www.sunpeaksresort.com/ski-ride/weather-conditions-cams/weather-snow-report"
+
+    # Send an HTTP request to the URL
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Replace these tags and attributes with the actual ones that contain the temperature information
+        # Replace these tags and attributes with the actual ones that contain the temperature information
+        twenfour_hour = soup.find("span", class_="value_switch value_cm snow-24").text.strip()
+        seven_hour = soup.find("span", class_="value_switch value_cm snow-7").text.strip()
+        snow_base = soup.find("span", class_="value_switch value_cm").text.strip()
+        temp = soup.find_all("span", class_="value_switch value_deg")[3].text.strip()
+        # Extract and print the text content of the element
+        snow_numbers = [twenfour_hour,seven_hour,snow_base,"N/A",temp]
+
+        # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
+        values = [50.8820,119.9056] + snow_numbers
+        resort_dict['Sunpeaks'] = values
+        return resort_dict
+
+    else:
+        resort_dict['Sunpeaks'] = [51.0036,118.2143] + [0,0,0,0,0]
+        return resort_dict
+
+
 skimarmot_scraper(resort_dict)
 revelstoke_scrape(resort_dict)
+sunpeaks_scrape(resort_dict)
 print(resort_dict)
