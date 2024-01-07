@@ -235,7 +235,7 @@ def pano_scraper(resort_dict):
         # Check if both snow and temperature information were obtained
         if snow_numbers and Temp_num:
             #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
-            values = [50.45894339495676, -116.23825137414808] + snow_numbers + [temp_num]
+            values = [50.45894339495676, -116.23825137414808] + snow_numbers + [Temp_num]
 
             resort_dict['Panorama, BC'] = values
             return resort_dict
