@@ -18,8 +18,10 @@ snowfall_map = folium.Map(location=[56.1304, -106.3468], zoom_start=4)
 # Add the MousePosition plugin for hover information
 plugins.MousePosition().add_to(snowfall_map)
 
+
+ max_temp = max(data['Temperature'], key=abs)
 # Use colormap for temperature (LinearColormap)
-temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin=data['Temperature'].min(), vmax=data['Temperature'].max())
+temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin = -(max_temp), vmax=(max_temp))
 
 # Iterate through the data and add CircleMarker for each resort
 for index, row in data.iterrows():
