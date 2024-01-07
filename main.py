@@ -14,17 +14,24 @@ data = pd.DataFrame({
 
 # Create a map centered around Canada
 """
-province_input = inputs['province']
-if province_input = Alberta:
-
+snow_fall_input = inputs['map_display']
 
 
 """
-starting_location = [56.1304, -106.3468]
+province_input = input('province:')
+
+if province_input == 'All Canada':
+    starting_location = [56.1304, -106.3468]
+    zoom = 4
+elif province_input == 'Alberta':
+    starting_location = [52.6279, -118.5916]
+    zoom = 6
+else:
+    starting_location = [51.991422, -120.200058]
+    zoom = 6
 
 
-
-snowfall_map = folium.Map(location= starting_location, zoom_start=4)
+snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
 
 # Add the MousePosition plugin for hover information
 plugins.MousePosition().add_to(snowfall_map)
