@@ -27,6 +27,8 @@ snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
 # Add the MousePosition plugin for hover information
 plugins.MousePosition().add_to(snowfall_map)
 
+
+radius_input = input('which snowfall to display: ')
 # Iterate through the data and add CircleMarker for each resort
 for key in data.keys():
     resort = key
@@ -43,9 +45,9 @@ for key in data.keys():
     
     # Customize radius based on snowfall
     #radius = int(snowfall24h) 
-    radius_input = input('which snowfall to display: ')
+    
     radius_size = 0 #impacts size of circles
-    if radius_input == '7 day snow fall':
+    if radius_input == '7 day snowfall':
         radius_size = snowfall7d 
     elif radius_input == '24 hour snowfall':
         radius_size = snowfall24h
@@ -62,7 +64,7 @@ for key in data.keys():
     temperature_color = temperature_colormap(int(current_temp))
 
     # Create a pop-up with information
-    #popup_text = f"{resort_upper}\n Current Temperature: {current_temp}°C\n Base Snow: {snow_base}cm\n Snowfall 7 Days: {snowfall7d}cm \n Seasonal Snowfall: {seasonal_snowfall}cm\n Snowfall 24 Hours: {snowfall24h}cm"
+    popup_text = f"{resort_upper}\n Current Temperature: {current_temp}°C\n Base Snow: {snow_base}cm\n Snowfall 7 Days: {snowfall7d}cm \n Seasonal Snowfall: {seasonal_snowfall}cm\n Snowfall 24 Hours: {snowfall24h}cm"
     
 
 
