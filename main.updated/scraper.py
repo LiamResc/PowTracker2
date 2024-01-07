@@ -204,3 +204,46 @@ skimarmot_scraper(resort_dict)
 revelstoke_scrape(resort_dict)
 sunpeaks_scrape(resort_dict)
 print(resort_dict)
+
+
+
+def bigwhite_scraper(resort_dict):
+
+    url = "https://mont-sainte-anne.com/conditions-de-neige-ski-alpin/"
+
+    # Send an HTTP request to the URL
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find the element containing the weather information
+        weather_group_elements = soup.find_all('span', class_='snowreport-snowfall-box-value-element')
+
+        snow_numbers = []
+
+        for i in range(4,8):
+            original_num = weather_group_elements[i].text.strip()
+            new_num = ''.join(char for char in original_num if char.isdigit())
+            snow_numbers.append(new_num)
+
+
+
+
+        temp_num = soup.find('span', class_='big-font').text.strip()
+        
+
+        # Check if both snow and temperature information were obtained
+        if snow_numbers and temp_num:
+            #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
+            values = [49.731427663412234, -118.94392187439394] + snow_numbers + [temp_num]
+
+            resort_dict['Big White, BC'] = values
+            return resort_dict
+        else:
+            print("Failed to extract snow or temperature information.")
+
+    else:
+        print(f"Failed to retrieve the page. Status Code: {response.status_code}")
