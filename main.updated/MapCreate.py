@@ -4,10 +4,24 @@ from branca.colormap import LinearColormap
 from scraper import *
 
 data = resort_dict
-temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin=-40, vmax=20)
 
-# Create a map centered around Canada
-snowfall_map = folium.Map(location=[56.1304, -106.3468], zoom_start=4)
+
+temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin = -20, vmax=20)
+
+province_input = input('province:')
+
+if province_input == 'All Canada':
+    starting_location = [56.1304, -106.3468]
+    zoom = 4
+elif province_input == 'Alberta':
+    starting_location = [52.6279, -118.5916]
+    zoom = 6
+else:
+    starting_location = [51.991422, -120.200058]
+    zoom = 6
+
+
+snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
 
 # Add the MousePosition plugin for hover information
 plugins.MousePosition().add_to(snowfall_map)
@@ -24,10 +38,24 @@ for key in data.keys():
     seasonal_snowfall = data[key][5]
     current_temp = data[key][6]
 
+
+    
     # Customize radius based on snowfall
-    radius = int(snowfall24h) 
+    #radius = int(snowfall24h) 
+    radius_input = input('which snowfall to display: ')
+    radius_size = 0 #impacts size of circles
+    if radius_input == '7 day snow fall':
+        radius_size = snowfall7d = data[key][3]
+    elif radius_input == '24 hour snowfall':
+        radius_size = snowfall24h = data[key][2]
+    elif radius_input == 'Snow base':
+        radius_size = snow_base = data[key][4]
+    else:
+        radius_size = seasonal_snowfall = data[key][5]
+
 
     # Use the colormap to get color based on temperature
+    
     temperature_color = temperature_colormap(int(current_temp))
 
     # Create a pop-up with information
@@ -37,11 +65,11 @@ for key in data.keys():
     # Add CircleMarker to the map with a pop-up
     folium.CircleMarker(
         location=[latitude, longitude],
-        radius=radius,
+        radius=radius_size,
         color=temperature_color,  # Set the outline color based on temperature
         fill=True,
         fill_color=temperature_color,  # Set the fill color based on temperature
-        fill_opacity=0.7,
+        fill_opacity=0.8,
         popup=folium.Popup(popup_text, parse_html=True)
     ).add_to(snowfall_map)
 
