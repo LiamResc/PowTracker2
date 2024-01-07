@@ -179,7 +179,6 @@ def main(inputs):
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
-
     def grouse_scrape(resort_dict):
         # Replace this URL with the actual URL of the website you want to scrape
         url = "https://www.grousemountain.com/current_conditions"
@@ -254,7 +253,6 @@ def main(inputs):
 
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
-
 
     def lemassif(resort_dict):
 
