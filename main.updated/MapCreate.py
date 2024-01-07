@@ -46,7 +46,7 @@ for key in data.keys():
     # Customize radius based on snowfall
     #radius = int(snowfall24h) 
     
-    radius_size = 0 #impacts size of circles
+   
     if radius_input == '7 day snowfall':
         radius_size = snowfall7d 
     elif radius_input == '24 hour snowfall':
@@ -57,6 +57,7 @@ for key in data.keys():
         radius_size = seasonal_snowfall
 
     radius_size = math.log2(int(radius_size) + 1) * 5
+    print(radius_size)
 
 
     # Use the colormap to get color based on temperature
@@ -82,6 +83,7 @@ for key in data.keys():
 
 # Use colormap for temperature (LinearColormap)
 # Add the colormap to the map as a legend
+
 temperature_colormap.caption = 'Temperature (°C)'
 temperature_colormap.add_to(snowfall_map)
 
