@@ -179,7 +179,6 @@ def main(inputs):
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
-
     def grouse_scrape(resort_dict):
         # Replace this URL with the actual URL of the website you want to scrape
         url = "https://www.grousemountain.com/current_conditions"
@@ -208,7 +207,7 @@ def main(inputs):
             numbers = [int(re.search(r'-?\d+', element).group()) for element in snow_numbers if re.search(r'-?\d+', element)]
             # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
             values = [49.3854,-123.0811] + numbers
-            resort_dict['Grouse Mt., B'] = values
+            resort_dict['Grouse Mt., BC'] = values
             return resort_dict
 
         else:
