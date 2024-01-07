@@ -179,6 +179,7 @@ def main(inputs):
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
+
     def grouse_scrape(resort_dict):
         # Replace this URL with the actual URL of the website you want to scrape
         url = "https://www.grousemountain.com/current_conditions"
@@ -254,6 +255,7 @@ def main(inputs):
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
+
     def lemassif(resort_dict):
 
         url = "https://www.lemassif.com/en/the-mountain/winter/snow-weather-webcams"
@@ -314,10 +316,22 @@ def main(inputs):
         zoom = 6
 
 
+
+
     snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
     plugins.MousePosition().add_to(snowfall_map)
 
-    
+    if province_input != 'All Canada':
+                    #Add markers for every location
+        for key in data.keys():
+            latitude = data[key][0]
+            longitude = data[key][1]
+            resort = key
+            folium.Marker([latitude,longitude],
+                tooltip = resort,
+                ).add_to(snowfall_map)
+
+
     # Iterate through the data and add CircleMarker for each resort
     for key in data.keys():
         resort = key
