@@ -132,6 +132,54 @@ def main(inputs):
             resort_dict['Sunpeaks'] = [51.0036,-118.2143] + [0,0,0,0,0]
             return resort_dict
 
+    def pano_scraper(resort_dict):
+        url = "https://www.panoramaresort.com/panorama-today/daily-snow-report/"
+
+        # Send an HTTP request to the URL
+        response = requests.get(url)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the HTML content of the page
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Find the element containing the weather information
+            weather_group_elements = soup.find_all('h4', class_='margin-bottom-0')
+
+            snow_numbers = []
+
+            for i in range(8,10):
+                original_num = weather_group_elements[i].text.strip()
+                new_num = ''.join(char for char in original_num if char.isdigit())
+                snow_numbers.append(new_num)
+            twentyfour_hour = soup.find_all("h4", class_="margin-bottom-0")[6].text.strip()
+            snow_base = soup.find_all("h4", class_="margin-bottom-0")[3].text.strip()
+            Twentyfour_hour = ''.join(char for char in twentyfour_hour if char.isdigit())
+            Snow_base = ''.join(char for char in snow_base if char.isdigit())
+            snow_numbers.append(Twentyfour_hour)
+            snow_numbers.append(Snow_base)
+            snow_numbers[0],snow_numbers[2] = Twentyfour_hour,snow_numbers[0]
+            snow_numbers[1],snow_numbers[2] = snow_numbers[2],snow_numbers[1]
+
+
+            temp_num = soup.find('div', class_='temp').text.strip()
+            Temp_num = '-' if temp_num.startswith('-') else ''
+            Temp_num += ''.join(char for char in temp_num if char.isdigit())
+
+            # Check if both snow and temperature information were obtained
+            if snow_numbers and Temp_num:
+                #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
+                values = [50.45894339495676, -116.23825137414808] + snow_numbers + [Temp_num]
+
+                resort_dict['Panorama, BC'] = values
+                return resort_dict
+            else:
+                print("Failed to extract snow or temperature information.")
+
+        else:
+            print(f"Failed to retrieve the page. Status Code: {response.status_code}")
+
+
     def grouse_scrape(resort_dict):
         # Replace this URL with the actual URL of the website you want to scrape
         url = "https://www.grousemountain.com/current_conditions"
@@ -208,6 +256,41 @@ def main(inputs):
         else:
             print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
+
+    def lemassif(resort_dict):
+
+        url = "https://www.lemassif.com/en/the-mountain/winter/snow-weather-webcams"
+
+        # Send an HTTP request to the URL
+        response = requests.get(url)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the HTML content of the page
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Find the element containing the weather information
+            weather_group_elements = soup.find_all('span', class_='metric-value')
+            twentfour_hour = weather_group_elements[8].get_text(strip=True).strip("cm")
+
+            snow_numbers = [twentfour_hour]
+
+            for i in range(10,12):
+                snow_numbers.append(weather_group_elements[i].get_text(strip=True).strip("cm"))
+            snow_numbers.append(weather_group_elements[11].get_text(strip=True).strip("cm"))
+            snow_numbers.append(weather_group_elements[0].get_text(strip=True).strip("°C"))
+
+            # Check if both snow and temperature information were obtained
+            values = [47.4167, -70.5470] + snow_numbers
+            #values = [int(re.search(r'-?\d+(.\d+)?', element).group()) for element in values if re.search(r'-?\d+(.\d+)?', element)]
+            resort_dict['Le Massif, QC'] = values
+            return resort_dict
+            
+        else:
+            print(f"Failed to retrieve the page. Status Code: {response.status_code}")
+    
+    lemassif(resort_dict)
+    pano_scraper(resort_dict)
     bigwhite_scraper(resort_dict)
     grouse_scrape(resort_dict)
     skimarmot_scraper(resort_dict)
@@ -225,6 +308,9 @@ def main(inputs):
         zoom = 4
     elif province_input == 'Alberta':
         starting_location = [54.5279, -118.2916]
+        zoom = 6
+    elif province_input == 'Quebec':
+        starting_location = [47, -73]
         zoom = 6
     else:
         starting_location = [50.991422, -120.200058]
@@ -262,6 +348,8 @@ def main(inputs):
             radius_size = snow_base
         else:
             radius_size = seasonal_snowfall
+
+
         if radius_size == 'N/A':
             radius_size=5   
         else:
@@ -270,7 +358,7 @@ def main(inputs):
 
 
         # Use the colormap to get color based on temperature
-        temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin = -20, vmax=20)
+        temperature_colormap = LinearColormap(['blue', 'white', 'red'], vmin = -25, vmax=20)
         temperature_color = temperature_colormap(int(current_temp))
 
         # Create a pop-up with information
