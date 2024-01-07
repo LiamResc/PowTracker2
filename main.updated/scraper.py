@@ -119,7 +119,7 @@ def sunpeaks_scrape(resort_dict):
         return resort_dict
 
     else:
-        resort_dict['Sunpeaks'] = [51.0036,118.2143] + [0,0,0,0,0]
+        resort_dict['Sunpeaks'] = [51.0036,-118.2143] + [0,0,0,0,0]
         return resort_dict
 
 
