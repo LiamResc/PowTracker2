@@ -1,6 +1,7 @@
 import folium
 from folium import plugins
 import pandas as pd
+import math
 from branca.colormap import LinearColormap
 import requests
 from bs4 import BeautifulSoup
@@ -130,43 +131,110 @@ def main(inputs):
             resort_dict['Sunpeaks'] = [51.0036,-118.2143] + [0,0,0,0,0]
             return resort_dict
 
+    def grouse_scrape(resort_dict):
+        # Replace this URL with the actual URL of the website you want to scrape
+        url = "https://www.grousemountain.com/current_conditions"
 
+        # Send an HTTP request to the URL
+        response = requests.get(url)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the HTML content of the page
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Replace these tags and attributes with the actual ones that contain the temperature information
+            # Replace these tags and attributes with the actual ones that contain the temperature information
+            all = soup.find_all("h3", class_="metric")
+            twenfour_hour = soup.find_all("h3", class_="metric")[3].text.strip()
+            snow_base = soup.find_all("h3", class_="metric")[8].text.strip()
+            temp = soup.find_all("h3", class_="metric")[0].text.strip()
+            snow_numbers = [twenfour_hour,snow_base,temp]
+            for i in range(5,7):
+                if i == 5:
+                    snow_numbers.insert(1,all[i].text.strip())
+                else:
+                    snow_numbers.insert(3,all[i].text.strip())
+            # Extract and print the text content of the element
+            numbers = [int(re.search(r'-?\d+', element).group()) for element in snow_numbers if re.search(r'-?\d+', element)]
+            # 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
+            values = [49.3854,-123.0811] + numbers
+            resort_dict['Grouse Mountain'] = values
+            return resort_dict
+
+        else:
+            resort_dict['Sunpeaks'] = [49.3854,-123.0811] + [0,0,0,0,0]
+            return resort_dict
+        
+    def bigwhite_scraper(resort_dict):
+
+        url = "https://www.bigwhite.com/mountain-conditions/daily-snow-report"
+
+        # Send an HTTP request to the URL
+        response = requests.get(url)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the HTML content of the page
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Find the element containing the weather information
+            weather_group_elements = soup.find_all('span', class_='bigger-font')
+
+            snow_numbers = []
+
+            for i in range(4,8):
+                original_num = weather_group_elements[i].text.strip()
+                new_num = ''.join(char for char in original_num if char.isdigit())
+                snow_numbers.append(new_num)
+
+
+
+
+            temp_num = soup.find('span', class_='big-font').text.strip()
+            
+
+            # Check if both snow and temperature information were obtained
+            if snow_numbers and temp_num:
+                #values = [latitude, longitude, 24 hour snowfall, 7 day snowfall , Snow base, Seasonal snowfall, Current temperature]
+                values = [49.731427663412234, -118.94392187439394] + snow_numbers + [temp_num]
+
+                resort_dict['Big White'] = values
+                return resort_dict
+            else:
+                print("Failed to extract snow or temperature information.")
+
+        else:
+            print(f"Failed to retrieve the page. Status Code: {response.status_code}")
+
+    bigwhite_scraper(resort_dict)
+    grouse_scrape(resort_dict)
     skimarmot_scraper(resort_dict)
     revelstoke_scrape(resort_dict)
     sunpeaks_scrape(resort_dict)
-    print(resort_dict)
-
-    import folium
-    import math
-    from folium import plugins
-    from branca.colormap import LinearColormap
-
-
     data = resort_dict
 
 
-
-
     province_input = inputs['province']
+    radius_input = inputs['map_display']
+
 
     if province_input == 'All Canada':
         starting_location = [56.1304, -106.3468]
         zoom = 4
     elif province_input == 'Alberta':
-        starting_location = [52.6279, -118.5916]
+        starting_location = [54.5279, -118.2916]
         zoom = 6
     else:
-        starting_location = [51.991422, -120.200058]
+        starting_location = [50.991422, -120.200058]
         zoom = 6
 
 
     snowfall_map = folium.Map(location= starting_location, zoom_start=zoom)
-
-    # Add the MousePosition plugin for hover information
     plugins.MousePosition().add_to(snowfall_map)
 
 
-    radius_input = inputs['map_display']
+    
     # Iterate through the data and add CircleMarker for each resort
     for key in data.keys():
         resort = key
