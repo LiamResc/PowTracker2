@@ -24,34 +24,31 @@ snowfall_value2= snowfall_element.text.strip()#[element.get_text(strip=True) for
 values= list(snowfall_value2.strip(' cm')) + snowfall_values1
 
 values.remove(values[1])
-
+    
 
 #def BremontTemp(resort_dict):
-def weatherGranby():
-    url = "https://weather.gc.ca/city/pages/qc-5_metric_e.html"
 
-    # Send a GET request to the URL
-    response = requests.get(url)
+url = "https://weather.gc.ca/city/pages/qc-5_metric_e.html"
 
-    if response.status_code == 200:
-        # Parse the HTML content using BeautifulSoup
-        soup = BeautifulSoup(response.text, "html.parser")
+# Send a GET request to the URL
+response = requests.get(url)
 
-        # Find the specific element containing the current temperature
-        temperature_element = soup.find("p", class_="mrgn-bttm-sm lead no-obs-icon")
+if response.status_code == 200:
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(response.text, "html.parser")
 
-        # Extract and print the current temperature
-        temperature = temperature_element.text.strip() if temperature_element else "N/A"
-        temperature_numeric = re.search(r'-?\d+(.\d+)?', temperature)
-        return int(temperature_numeric.group())
-    else:
-        temp = 0
-        return temp
-values.append(weatherGranby())
+    # Find the specific element containing the current temperature
+    temperature_element = soup.find("p", class_="mrgn-bttm-sm lead no-obs-icon")
+
+    # Extract and print the current temperature
+    temperature = temperature_element.text.strip('°C') if temperature_element else "N/A"
+    temperature_numeric = re.search(r'-?\d+(.\d+)?', temperature)
+    
+values.append(temperature)
 
 
-values[0]=snowfall_value2.strip('cm')
-values.insert(3,values[3])
+
+values.insert(3,values[2])
 values.remove(values[1])
 
 latitude='45.305'

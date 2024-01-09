@@ -293,9 +293,9 @@ def weatherGranby():
         temperature_element = soup.find("p", class_="mrgn-bttm-sm lead no-obs-icon")
 
         # Extract and print the current temperature
-        temperature = temperature_element.text.strip() if temperature_element else "N/A"
+        temperature = temperature_element.text.strip('°C') if temperature_element else "N/A"
         temperature_numeric = re.search(r'-?\d+(.\d+)?', temperature)
-        return int(temperature_numeric.group())
+        return (temperature_numeric.group())
     else:
         temp = 0
         return temp
@@ -324,9 +324,8 @@ def bromont_scraper(resort_dict):
     values.remove(values[1])
 
     values.append(weatherGranby())
-    values[0]=snowfall_value2.strip('cm')
-    values.insert(3,values[3])
-    values.remove(values[1])
+    values.insert(3,values[2])
+   
 
     latitude='45.305'
     longitude='-72.637'
