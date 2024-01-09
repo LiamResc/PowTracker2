@@ -108,8 +108,8 @@ def sunpeaks_scrape(resort_dict):
         # Replace these tags and attributes with the actual ones that contain the temperature information
         twenfour_hour = soup.find("span", class_="value_switch value_cm snow-24").text.strip()
         seven_hour = soup.find("span", class_="value_switch value_cm snow-7").text.strip()
-        snow_base = soup.find("span", class_="value_switch value_cm").text.strip()
-        temp = soup.find_all("span", class_="value_switch value_deg")[3].text.strip()
+        snow_base = soup.find_all("span", class_="value_switch value_cm")[1].text.strip()
+        temp = soup.find_all("span", class_="value_switch value_deg")[1].text.strip()
         # Extract and print the text content of the element
         snow_numbers = [twenfour_hour,seven_hour,snow_base,"N/A",temp]
 
@@ -293,9 +293,9 @@ def weatherGranby():
         temperature_element = soup.find("p", class_="mrgn-bttm-sm lead no-obs-icon")
 
         # Extract and print the current temperature
-        temperature = temperature_element.text.strip('°C') if temperature_element else "N/A"
+        temperature = temperature_element.text.strip() if temperature_element else "N/A"
         temperature_numeric = re.search(r'-?\d+(.\d+)?', temperature)
-        return (temperature_numeric.group())
+        return int(temperature_numeric.group())
     else:
         temp = 0
         return temp
@@ -324,8 +324,9 @@ def bromont_scraper(resort_dict):
     values.remove(values[1])
 
     values.append(weatherGranby())
-    values.insert(3,values[2])
-   
+    values[0]=snowfall_value2.strip('cm')
+    values.insert(3,values[3])
+    values.remove(values[1])
 
     latitude='45.305'
     longitude='-72.637'
